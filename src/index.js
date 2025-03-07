@@ -4,9 +4,17 @@ import imageRouter from "./routes/image.js";
 import userRouter from "./routes/user.js";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./swagger.js";
+import path from "path"; // Thêm import path
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(express.json());
+
+// Phục vụ file tĩnh từ thư mục uploads
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 // Routes
 app.use("/api/auth", authRouter);

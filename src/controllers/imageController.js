@@ -1,4 +1,4 @@
-﻿import * as imageService from '../services/imageService.js';
+﻿import * as imageService from "../services/imageService.js";
 
 export const getImages = async (req, res) => {
   try {
@@ -57,6 +57,25 @@ export const addComment = async (req, res) => {
     const userId = req.user.userId;
     const comment = await imageService.addComment(userId, id, content);
     res.status(201).json(comment);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+export const uploadImage = async (req, res) => {
+  try {
+    const { title, description } = req.body;
+    const userId = req.user.userId;
+    if (!req.file) throw new Error("No image file uploaded");
+
+    const imageUrl = `/uploads/${req.file.filename}`;
+    const image = await imageService.createImage(
+      title,
+      description,
+      imageUrl,
+      userId
+    );
+    res.status(201).json({ message: "Image uploaded successfully", image });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
